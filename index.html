@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Aldevs</title>
+<link rel="icon" type="image/png" href="assets/logo.png" />
+<link rel="apple-touch-icon" href="assets/logo.png" />
+<meta name="theme-color" content="#000000" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg: #000000;
+    --surface: #0d0d0d;
+    --surface-hover: #171717;
+    --line: #ffffff;
+    --line-soft: rgba(255,255,255,0.14);
+    --line-softer: rgba(255,255,255,0.07);
+    --text: #ffffff;
+    --text-muted: rgba(255,255,255,0.46);
+    --radius-tile: 26%;
+    --font: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html,body{
+    margin:0;
+    padding:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100%;
+  }
+
+  body{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding: clamp(40px, 8vh, 96px) 20px 64px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- Hero ---------- */
+
+  .hero{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    opacity:0;
+    transform: scale(.9);
+    animation: hero-in .6s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+
+  .hero-mark{
+    width: 84px;
+    height: 84px;
+    border-radius: var(--radius-tile);
+    display:block;
+  }
+
+  @keyframes hero-in{
+    to{ opacity:1; transform: scale(1); }
+  }
+
+  /* ---------- Grid ---------- */
+
+  .grid{
+    width:100%;
+    max-width: 760px;
+    margin-top: clamp(48px, 8vh, 88px);
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+    gap: clamp(18px, 3vw, 30px);
+  }
+
+  .tile-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    opacity:0;
+    transform: translateY(6px);
+    animation: tile-in .5s ease forwards;
+  }
+
+  @keyframes tile-in{
+    to{ opacity:1; transform:none; }
+  }
+
+  .tile{
+    width:100%;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-tile);
+    background: var(--surface);
+    border: 1.5px solid var(--line-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    color: var(--text);
+    transition: background-color .18s ease, border-color .18s ease, transform .18s ease;
+  }
+
+  .tile svg{
+    width: 42%;
+    height: 42%;
+    stroke: var(--text);
+    fill:none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke .18s ease;
+  }
+
+  .tile:hover,
+  .tile:focus-visible{
+    background: var(--surface-hover);
+    border-color: var(--line);
+    transform: translateY(-3px);
+  }
+
+  .tile:active{
+    transform: translateY(-1px) scale(.97);
+  }
+
+  .tile:focus-visible{
+    outline: 2px solid var(--line);
+    outline-offset: 3px;
+  }
+
+  .tile-label{
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: .01em;
+    color: var(--text-muted);
+    text-align:center;
+    line-height:1.3;
+  }
+
+  .tile-wrap:hover .tile-label{
+    color: var(--text);
+  }
+
+  /* stagger */
+  .tile-wrap:nth-child(1){ animation-delay:.12s; }
+  .tile-wrap:nth-child(2){ animation-delay:.16s; }
+  .tile-wrap:nth-child(3){ animation-delay:.20s; }
+  .tile-wrap:nth-child(4){ animation-delay:.24s; }
+  .tile-wrap:nth-child(5){ animation-delay:.28s; }
+  .tile-wrap:nth-child(6){ animation-delay:.32s; }
+  .tile-wrap:nth-child(7){ animation-delay:.36s; }
+  .tile-wrap:nth-child(8){ animation-delay:.40s; }
+  .tile-wrap:nth-child(9){ animation-delay:.44s; }
+  .tile-wrap:nth-child(10){ animation-delay:.48s; }
+  .tile-wrap:nth-child(11){ animation-delay:.52s; }
+  .tile-wrap:nth-child(12){ animation-delay:.56s; }
+
+  /* placeholder tile for future apps */
+  .tile.is-placeholder{
+    border-style: dashed;
+    background: transparent;
+  }
+  .tile.is-placeholder svg{ stroke: var(--text-muted); }
+  .tile.is-placeholder:hover{
+    background: transparent;
+    border-color: var(--line-soft);
+    transform:none;
+  }
+
+  @media (max-width: 420px){
+    .grid{ grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero, .tile-wrap{ animation: none !important; opacity:1 !important; transform:none !important; }
+    .tile{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <img class="hero-mark" src="assets/logo.png" alt="Aldevs" />
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <!-- ============================================================
+       Icon library — one <symbol> per app. Reuse an existing icon
+       or add a new <symbol id="icon-your-key"> here, then reference
+       it by "your-key" in the APPS array below.
+       ============================================================ -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+
+      <symbol id="icon-duty-log" viewBox="0 0 24 24">
+        <path d="M9 4h6a1 1 0 0 1 1 1v1.2h1.3A1.7 1.7 0 0 1 19 7.9v11.4a1.7 1.7 0 0 1-1.7 1.7H6.7A1.7 1.7 0 0 1 5 19.3V7.9a1.7 1.7 0 0 1 1.7-1.7H8V5a1 1 0 0 1 1-1Z"/>
+        <path d="M9 4.6h6"/>
+        <path d="M8.2 13.2 10.4 15.4 15.6 9.6"/>
+      </symbol>
+
+      <symbol id="icon-class-board" viewBox="0 0 24 24">
+        <rect x="4" y="5" width="16" height="14" rx="2"/>
+        <path d="M9.3 5v14M14.7 5v14"/>
+        <rect x="5.4" y="7" width="2.5" height="3.2" rx=".6" stroke-width="1.3"/>
+        <rect x="10.8" y="7" width="2.5" height="5.4" rx=".6" stroke-width="1.3"/>
+        <rect x="16.1" y="7" width="2.5" height="2.4" rx=".6" stroke-width="1.3"/>
+      </symbol>
+
+      <symbol id="icon-khorochnama" viewBox="0 0 24 24">
+        <path d="M6.5 4h9A1.5 1.5 0 0 1 17 5.5v13.8l-1.8-1.2-1.8 1.2-1.8-1.2-1.8 1.2-1.8-1.2L6.2 19V5.5A1.5 1.5 0 0 1 6.5 4Z"/>
+        <path d="M9 8.6h6M9 12h6"/>
+        <path d="M15.6 15.4 19 12M19 12l-1.1 3.2M19 12l-3.2-1"/>
+      </symbol>
+
+      <symbol id="icon-khoroch-ledger" viewBox="0 0 24 24">
+        <rect x="4" y="5.5" width="16" height="13" rx="1.6"/>
+        <path d="M4 9.8h16M9.3 9.8v9.2M14.7 9.8v9.2"/>
+      </symbol>
+
+      <symbol id="icon-somoy-calculator" viewBox="0 0 24 24">
+        <circle cx="12" cy="13" r="7.2"/>
+        <path d="M12 9.2V13l2.6 2"/>
+        <path d="M9.6 3.6h4.8"/>
+      </symbol>
+
+      <symbol id="icon-hishaber-khata" viewBox="0 0 24 24">
+        <path d="M6.2 4.4h9.6A1.7 1.7 0 0 1 17.5 6.1v13.5H7.9A1.7 1.7 0 0 1 6.2 18V4.4Z"/>
+        <path d="M6.2 4.4v13.6A1.7 1.7 0 0 0 7.9 19.6h9.6"/>
+        <path d="M9.6 4.4v6.4l1.8-1.5 1.8 1.5V4.4"/>
+      </symbol>
+
+      <symbol id="icon-tour-planner" viewBox="0 0 24 24">
+        <path d="M12 20s6-5.6 6-10.4A6 6 0 0 0 6 9.6C6 14.4 12 20 12 20Z"/>
+        <circle cx="12" cy="9.6" r="2.1"/>
+      </symbol>
+
+      <symbol id="icon-pocket" viewBox="0 0 24 24">
+        <path d="M4.5 8.4A1.4 1.4 0 0 1 5.9 7h12.2a1.4 1.4 0 0 1 1.4 1.4v9.2a1.4 1.4 0 0 1-1.4 1.4H5.9a1.4 1.4 0 0 1-1.4-1.4Z"/>
+        <path d="M8 7V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1"/>
+        <path d="M14.6 13.2a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8Z"/>
+      </symbol>
+
+      <symbol id="icon-plus" viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14"/>
+      </symbol>
+
+    </defs>
+  </svg>
+
+  <script>
+    // ============================================================
+    // Add a new webapp by adding one object here — nothing else
+    // in the file needs to change.
+    //
+    //   { name: "Shown under the tile", url: "https://...", icon: "icon-key" }
+    //
+    // "icon" must match a <symbol id="icon-icon-key"> above. If none
+    // of the existing icons fit, add a new <symbol> in the library
+    // above first, then point to it here.
+    // ============================================================
+    const APPS = [
+      { name: "Duty Log",         url: "https://aldevs-cloud.github.io/duty-log/",         icon: "duty-log" },
+      { name: "Class Board",      url: "https://aldevs-cloud.github.io/class-board/",       icon: "class-board" },
+      { name: "Khorochnama",      url: "https://aldevs-cloud.github.io/khorochnama/",       icon: "khorochnama" },
+      { name: "Khoroch Ledger",   url: "https://aldevs-cloud.github.io/khoroch-ledger/",    icon: "khoroch-ledger" },
+      { name: "Somoy Calculator", url: "https://aldevs-cloud.github.io/time-calculator/",   icon: "somoy-calculator" },
+      { name: "Hishaber Khata",   url: "https://aldevs-cloud.github.io/hishaber-khata/",    icon: "hishaber-khata" },
+      { name: "Tour Planner",     url: "https://aldevs-cloud.github.io/tour-planner/",      icon: "tour-planner" },
+      { name: "Pocket",           url: "https://aldevs-cloud.github.io/pocket/",             icon: "pocket" },
+    ];
+
+    const grid = document.getElementById("grid");
+
+    APPS.forEach(app => {
+      const wrap = document.createElement("div");
+      wrap.className = "tile-wrap";
+
+      const a = document.createElement("a");
+      a.className = "tile";
+      a.href = app.url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.setAttribute("aria-label", app.name);
+      a.innerHTML = `<svg><use href="#icon-${app.icon}"></use></svg>`;
+
+      const label = document.createElement("span");
+      label.className = "tile-label";
+      label.textContent = app.name;
+
+      wrap.appendChild(a);
+      wrap.appendChild(label);
+      grid.appendChild(wrap);
+    });
+
+    // quiet placeholder tile hinting that more apps land here later
+    const placeholderWrap = document.createElement("div");
+    placeholderWrap.className = "tile-wrap";
+    placeholderWrap.innerHTML = `
+      <span class="tile is-placeholder" aria-hidden="true">
+        <svg><use href="#icon-plus"></use></svg>
+      </span>
+      <span class="tile-label">&nbsp;</span>
+    `;
+    grid.appendChild(placeholderWrap);
+  </script>
+
+</body>
+</html>
